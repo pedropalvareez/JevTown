@@ -1,0 +1,23 @@
+{
+  "name": "@jev-town/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "dev": "npm run build && node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "npm run build && node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@fastify/websocket": "11.3.0",
+    "fastify": "5.12.4"
+  },
+  "devDependencies": {
+    "@types/ws": "8.18.1"
+  }
+}

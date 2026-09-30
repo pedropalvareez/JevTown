@@ -1,0 +1,24 @@
+{
+  "name": "jev-town",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/web",
+    "apps/api"
+  ],
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "dev:web": "npm run dev --workspace @jev-town/web",
+    "dev:api": "npm run dev --workspace @jev-town/api",
+    "typecheck": "npm run typecheck --workspaces",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspace @jev-town/api"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "typescript": "5.9.3"
+  }
+}

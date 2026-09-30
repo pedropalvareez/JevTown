@@ -1,0 +1,40 @@
+name: jev-town
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: api
+    init: true
+    environment:
+      JEV_MODE: ${JEV_MODE:-mock}
+      JEV_API_KEY: ${JEV_API_KEY:-}
+    ports:
+      - "127.0.0.1:4000:4000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/healthz').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: web
+    init: true
+    environment:
+      API_PROXY_TARGET: http://api:4000
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "Promise.all(['/', '/api/healthz'].map(path => fetch('http://127.0.0.1:5173' + path))).then(rs => process.exit(rs.every(r => r.ok) ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
